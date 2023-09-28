@@ -3,7 +3,7 @@ title: "R Notebook"
 output: github_document
 ---
 
-```{r}
+```{r,eval=FALSE}
 download.file("https://github.com/ANF-MetaBioDiv/course-material/archive/refs/heads/main.zip", destfile = "main.zip")
 ```
 
@@ -51,7 +51,7 @@ if (!file.exists(silva_species_assignment)) {
 ```
 
 ```{r}
-# devtools::load_all()
+devtools::load_all(path="/Users/yvanohemartinier/ADM_tutoriel_dada2/course-material-main/R")
 ```
 
 ```{r}
@@ -63,12 +63,14 @@ fnFs <- sort(list.files(path_to_fastqs,
                         pattern = "_R1.fastq.gz",
                         full.names = TRUE))
 ```
+#avec cette commande va chercher tous les noms de fichier "_R1.fastaq.gz" Mais on ne les veut pas tous
 
 ```{r}
 fnRs <- sort(list.files(path_to_fastqs,
                         pattern = "_R2.fastq.gz",
                         full.names = TRUE))
 ```
+
 ## 2.2 Extract sample names
 ```{r}
 sample_names <- basename(fnFs) |>
@@ -76,17 +78,20 @@ sample_names <- basename(fnFs) |>
   sapply(head, 1)
 ```
 
+#utilisation d'un plit, sample_names <- basename(fnFs) |> 
+Dans basename on va rajouter une conditions, la suivante
+strsplit(split = "_") peremt de decouper les noms de base qui sont séparé avec le "_" 
 ```{r}
 basename(fnFs) |>
   head()
 ```
-
+# avant découpage
 ```{r}
 basename(fnFs) |>
   strsplit(split = "_") |>
   head()
 ```
-
+# après découpage
 ```{r}
 basename(fnFs) |>
   strsplit(split = "_") |>
@@ -99,7 +104,7 @@ gsub("^.+/|_.+$", "", fnFs) |> head()
 ```
 
 ## 3.Sequence quality check
-#```{r}
+```{r}
 # create a directory for the outputs
 quality_folder <- here::here("outputs",
                              "dada2",
@@ -113,4 +118,37 @@ qualityprofile(fnFs,
                fnRs,
                file.path(quality_folder, "quality_plots.pdf"))
 ```
+
+
+```{r}
+path_to_trimmed_reads <- here::here(
+  "outputs",
+  "dada2",
+  "trimmed"
+)
+
+if (!dir.exists(path_to_trimmed_reads)) dir.create(path_to_trimmed_reads, recursive = TRUE)
+```
+
+```{r}
+primer_fwd  <- "CCTACGGGNBGCASCAG"
+primer_rev  <- "GACTACNVGGGTATCTAAT"
+```
+
+```{r}
+Biostrings::readDNAStringSet(
+  fnFs[1],
+  format = "fastq",
+  nrec = 10
+)
+```
+```{r}
+Biostrings::readDNAStringSet(
+  fnRs[1],
+  format = "fastq",
+  nrec = 10
+)
+
+```
+
 

@@ -72,3 +72,69 @@ fnRs <- sort(list.files(path_to_fastqs,
                         pattern = "_R2.fastq.gz",
                         full.names = TRUE))
 ```
+
+## 2.2 Extract sample names
+
+``` r
+sample_names <- basename(fnFs) |>
+  strsplit(split = "_") |>
+  sapply(head, 1)
+```
+
+``` r
+basename(fnFs) |>
+  head()
+```
+
+    ## [1] "S11B_R1.fastq.gz" "S1B_R1.fastq.gz"  "S2B_R1.fastq.gz"  "S2S_R1.fastq.gz" 
+    ## [5] "S3B_R1.fastq.gz"  "S3S_R1.fastq.gz"
+
+``` r
+basename(fnFs) |>
+  strsplit(split = "_") |>
+  head()
+```
+
+    ## [[1]]
+    ## [1] "S11B"        "R1.fastq.gz"
+    ## 
+    ## [[2]]
+    ## [1] "S1B"         "R1.fastq.gz"
+    ## 
+    ## [[3]]
+    ## [1] "S2B"         "R1.fastq.gz"
+    ## 
+    ## [[4]]
+    ## [1] "S2S"         "R1.fastq.gz"
+    ## 
+    ## [[5]]
+    ## [1] "S3B"         "R1.fastq.gz"
+    ## 
+    ## [[6]]
+    ## [1] "S3S"         "R1.fastq.gz"
+
+``` r
+basename(fnFs) |>
+  strsplit(split = "_") |>
+  sapply(head, 1) |>
+  head()
+```
+
+    ## [1] "S11B" "S1B"  "S2B"  "S2S"  "S3B"  "S3S"
+
+``` r
+gsub("^.+/|_.+$", "", fnFs) |> head()
+```
+
+    ## [1] "S11B" "S1B"  "S2B"  "S2S"  "S3B"  "S3S"
+
+## 3.Sequence quality check
+
+\#\`\`\`{r} \# create a directory for the outputs quality_folder \<-
+here::here(“outputs”, “dada2”, “quality_plots”)
+
+if (!dir.exists(quality_folder)) { dir.create(quality_folder, recursive
+= TRUE) }
+
+qualityprofile(fnFs, fnRs, file.path(quality_folder,
+“quality_plots.pdf”)) \`\`\`

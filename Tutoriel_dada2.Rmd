@@ -69,4 +69,48 @@ fnRs <- sort(list.files(path_to_fastqs,
                         pattern = "_R2.fastq.gz",
                         full.names = TRUE))
 ```
+## 2.2 Extract sample names
+```{r}
+sample_names <- basename(fnFs) |>
+  strsplit(split = "_") |>
+  sapply(head, 1)
+```
+
+```{r}
+basename(fnFs) |>
+  head()
+```
+
+```{r}
+basename(fnFs) |>
+  strsplit(split = "_") |>
+  head()
+```
+
+```{r}
+basename(fnFs) |>
+  strsplit(split = "_") |>
+  sapply(head, 1) |>
+  head()
+```
+
+```{r}
+gsub("^.+/|_.+$", "", fnFs) |> head()
+```
+
+## 3.Sequence quality check
+#```{r}
+# create a directory for the outputs
+quality_folder <- here::here("outputs",
+                             "dada2",
+                             "quality_plots")
+
+if (!dir.exists(quality_folder)) {
+  dir.create(quality_folder, recursive = TRUE)
+}
+
+qualityprofile(fnFs,
+               fnRs,
+               file.path(quality_folder, "quality_plots.pdf"))
+```
 

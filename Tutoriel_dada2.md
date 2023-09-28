@@ -161,6 +161,10 @@ qualityprofile(fnFs,
     ## quartz_off_screen 
     ##                 2
 
+## 4 Primer removla
+
+4.1 Prepare outputs
+
 ``` r
 path_to_trimmed_reads <- here::here(
   "outputs",
@@ -170,6 +174,8 @@ path_to_trimmed_reads <- here::here(
 
 if (!dir.exists(path_to_trimmed_reads)) dir.create(path_to_trimmed_reads, recursive = TRUE)
 ```
+
+4.2 Remove primers
 
 ``` r
 primer_fwd  <- "CCTACGGGNBGCASCAG"
@@ -217,3 +223,5 @@ Biostrings::readDNAStringSet(
     ##  [8]   301 GACTACGAGGGTATCTAATCCCG...GGCTGCTGGCACGGAATTAGCC M01522:260:000000...
     ##  [9]   301 GGTATCTAATCCTCTTCGCTACC...CACGAAGTTAGCCGGACCTTCT M01522:260:000000...
     ## [10]   301 GACTACGGGGGTATCTAATCCTG...GGCTGCCGGCACGGGGTTAGCC M01522:260:000000...
+
+4.3 For more complex situations
